@@ -10,3 +10,51 @@ here are two examples:
 | processClassSha1.pl              | Extracts the sha of the class file and its corresponding signature only |
 | processClassExtractSigsUnique.pl | Extracts each signature once. Uses a database of signatures             |
 
+
+** processClassExtractSigsUnique.pl
+
+THe output of this program is one line per defined object in a
+class. it can be a class, a method or an attribute. 
+
+For a class it outputs:
+
+| sha1            | the sha of the file                           |
+| cLA             | it is a class                                 |
+| className       |                                               |
+| classFullName   |                                               |
+| classType       |                                               |
+| classPublic     |                                               |
+| classIsAbstract |                                               |
+| classIsFinal    |                                               |
+| classExtends    |                                               |
+| classImplements |                                               |
+| path            | full path of the .class file                  |
+| basename        | is name                                       |
+| ext             | its extension                                 |
+| sha1Inside      | sha1 of file where it was found               |
+| depth           | depth of class file in packages (starts at 0) |
+| compiledFrom    | compiled from line in decompilation           | 
+
+For methods or attributes
+
+| dataSha            | Shat of the entire signature of the class   |
+| mET or fIE         | is method or attribute(field)               |
+| sha1               | sha1 of file                                |
+|                    | Empty --my mistake                          |
+| className          |                                             |
+| classFullName      |                                             |
+| id                 |                                             |
+| fullId             | fully qualified id                          |
+| type               |                                             |
+| parms              |                                             |
+| throws             |                                             |
+| isPublic           |                                             |
+| isAbstract         |                                             |
+| isStatic           |                                             |
+| isMethod           |                                             |
+| throws             |                                             |
+| Entire declaration | Just in case, I save the entire declaration |
+  
+
+
+
