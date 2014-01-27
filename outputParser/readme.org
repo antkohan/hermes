@@ -1,0 +1,12 @@
+
+* Output processor.
+
+This program takes an output from hermes in the form of part.out.NNNN and parses it.
+The basis is the superclass in processor.pm, which can be extended for any purpose.
+
+here are two examples:
+
+
+| processClassSha1.pl              | Extracts the sha of the class file and its corresponding signature only |
+| processClassExtractSigsUnique.pl | Extracts each signature once. Uses a database of signatures             |
+
