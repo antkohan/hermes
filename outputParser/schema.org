@@ -1,0 +1,52 @@
+* Table Schema
+
+CREATE TABLE files (
+       SHA_FILE varchar(50) primary key,
+       SHA_CONTAINER varchar(50),
+       PATH text,
+       NAME text,
+       EXTENSION text,
+       MOD_DATE timestamp with time zone
+);
+
+CREATE TABLE classSigs (
+      SHA_SIG varchar(50) primary key, 
+      SHA_FILE varchar(50),
+      SHA_CONTAINTER varchar(50),
+      CLASS_NAME text,
+      FULL_CLASS_NAME text, 
+      PATH text,
+      BASENAME text, 
+      EXTENSION text
+);
+
+CREATE TABLE methodSigs (
+      SHA_SIG varchar(50) primary key, 
+      SHA_FILE varchar(50),
+      CLASS_NAME text,
+      FULL_CLASS_NAME text, 
+      ID text,
+      FULL_ID text, 
+      TYPE text,
+      PARAMETERS text
+);
+
+CREATE TABLE attributeSigs (
+      SHA_SIG varchar(50) primary key,
+      SHA_FILE varchar(50),
+      CLASS_NAME text,
+      FULL_CLASS_NAME text, 
+      ID text,
+      FULL_ID text
+);
+
+* Queries I used 
+  
+CREATE TEMP TABLE tmp as SELECT * FROM files WITH NO DATA;
+
+COPY tmp FROM '/Users/antkohan/Desktop/parser/output.csv' WITH DELIMITER ';' CSV;
+
+INSERT INTO files SELECT DISTINCT ON (sha_file) * FROM tmp;
+
+
+COPY FROM 
