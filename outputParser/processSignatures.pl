@@ -23,6 +23,7 @@ sub new {
     $self->{_outClass} = $fhs[0];
     $self->{_outMethod} = $fhs[1];
     $self->{_outAttr} = $fhs[2];
+    $self->{_outSHAs} = $fhs[3];
 
     return $self;
 }
@@ -43,32 +44,54 @@ sub process_file {
     my $outClass = $self->{_outClass};
     my $outMethod = $self->{_outMethod};
     my $outAttr = $self->{_outAttr};
+    my $outSHAs = $self->{_outSHAs};
 
     if ($fields[1] eq "cLA") {
+
 	my($shaFile, $isClass, $className, $fullClassName, $classType, $isPub, $isAb, $isFin, 
 	   $extends, $impl, $path ,$basename, $ext, $shaInside, $depth, $compFrom) = @fields;
+
 	$path =~ s/ (\/scratch) (\/\d+) (\[\d+\]) (\.moab01\.westgrid\.uvic\.ca) (\/.\.) (\w*)//x;
+
 	my $data = join("\n", $shaFile, $shaInside, $className, $fullClassName, $path, $basename, $ext);
 	my $sigSha = sha1_hex($data);
-	my $output = join(';', $sigSha, $shaFile, $shaInside, $className, $fullClassName, $path, $basename, $ext);
+
+	my $output = join(';', $sigSha, $shaInside, $className, $fullClassName, $path, $basename, $ext);
+	my $shaOutput = join(';', $sigSha, $shaFile);
+
 	print $outClass $output . "\n";
+	print $outSHAs $shaOutput . "\n";
+
     } elsif ($fields[1] eq "mET") {
+
 	my $classSha = shift @fields;
 	my ($isMet, $shaFile, $blank, $className, $fullClassName, $id, $fullId, $type, $params) = @fields;
+
 	my $data = join("\n", $shaFile,$className, $fullClassName, $id, $fullId, $type, $params);
 	my $sigSha = sha1_hex($data);
-	my $output = join(';', $sigSha,$shaFile,$className, $fullClassName, $id, $fullId, $type, $params);
+
+	my $output = join(';', $sigSha, $className, $fullClassName, $id, $fullId, $type, $params);
+	my $shaOutput = join(';', $sigSha, $shaFile);
+
 	print $outMethod $output . "\n";
+	print $outSHAs $shaOutput. "\n";
+
     } else {
+
 	my $classSha = shift @fields;
 	my ($isAttr, $shaFile, $blank, $className, $fullClassName, $id) = @fields;
+
 	my $data = join("\n", $shaFile,$className, $fullClassName, $id);
 	my $sigSha = sha1_hex($data);
-	my $output = join(';', $sigSha,$shaFile,$className, $fullClassName, $id);
+
+	my $output = join(';', $sigSha, $className, $fullClassName, $id);
+	my $shaOutput = join(';', $sigSha, $shaFile);
+
 	print $outAttr $output . "\n";
+	print $outSHAs $shaOutput . "\n";
     }
 }
 
-my ($outClass, $outMethod, $outAttr) = @ARGV;
-my $proc = new processSignatures($outClass, $outMethod, $outAttr);
+my (@outFiles) = @ARGV;
+my $proc = new processSignatures(@outFiles);
 $proc->process_signatures();

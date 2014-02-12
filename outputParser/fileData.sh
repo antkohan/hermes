@@ -1,5 +1,5 @@
-FILES=/Users/antkohan/Desktop/testInfo/output/*
-outfile=output.csv
+FILES=/home/anthony/Documents/testInfo/output/*
+outfile=outFileData.csv
 
 rm $outfile
 

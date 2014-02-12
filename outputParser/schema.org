@@ -1,18 +1,22 @@
 * Table Schema
 
+CREATE TABLE shas (
+	SHA_SIG varchar(45),
+	SHA_FILE varchar(45)
+);
+
 CREATE TABLE files (
-       SHA_FILE varchar(50) primary key,
-       SHA_CONTAINER varchar(50),
+       SHA_FILE varchar(45) primary key,
+       SHA_CONTAINER varchar(45),
        PATH text,
-       NAME text,
+       FILE_NAME text,
        EXTENSION text,
        MOD_DATE timestamp with time zone
 );
 
 CREATE TABLE classSigs (
-      SHA_SIG varchar(50) primary key, 
-      SHA_FILE varchar(50),
-      SHA_CONTAINTER varchar(50),
+      SHA_SIG varchar(45) primary key,
+      SHA_CONTAINER varchar(45),
       CLASS_NAME text,
       FULL_CLASS_NAME text, 
       PATH text,
@@ -20,33 +24,33 @@ CREATE TABLE classSigs (
       EXTENSION text
 );
 
-CREATE TABLE methodSigs (
-      SHA_SIG varchar(50) primary key, 
-      SHA_FILE varchar(50),
+CREATE TABLE methSigs (
+      SHA_SIG varchar(45) primary key,
       CLASS_NAME text,
       FULL_CLASS_NAME text, 
-      ID text,
-      FULL_ID text, 
+      METH_ID text,
+      METH_FULL_ID text, 
       TYPE text,
       PARAMETERS text
 );
 
-CREATE TABLE attributeSigs (
-      SHA_SIG varchar(50) primary key,
-      SHA_FILE varchar(50),
+CREATE TABLE attrSigs (
+      SHA_SIG varchar(45) primary key,
       CLASS_NAME text,
       FULL_CLASS_NAME text, 
-      ID text,
-      FULL_ID text
+      ATTR_ID text
 );
 
 * Queries I used 
   
 CREATE TEMP TABLE tmp as SELECT * FROM files WITH NO DATA;
 
-COPY tmp FROM '/Users/antkohan/Desktop/parser/output.csv' WITH DELIMITER ';' CSV;
+COPY tmp FROM '/home/anthony/Documents/hermes/outputParser/outFileData.csv' WITH DELIMITER ';' CSV;
 
 INSERT INTO files SELECT DISTINCT ON (sha_file) * FROM tmp;
 
+COPY classSigs FROM '/home/anthony/Documents/hermes/outputParser/sigClassOut.csv' WITH DELIMITER ';' CSV;
+COPY methSigs FROM '/home/anthony/Documents/hermes/outputParser/sigMethOut.csv' WITH DELIMITER ';' CSV;
+COPY attrSigs FROM '/home/anthony/Documents/hermes/outputParser/sigAttrOut.csv' WITH DELIMITER ';' CSV;
+COPY shas FROM '/home/anthony/Documents/hermes/outputParser/outSHAs.csv' WITH DELIMITER ';' CSV;
 
-COPY FROM 
