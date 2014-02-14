@@ -28,16 +28,6 @@ sub new {
     return $self;
 }
 
-sub process_signatures {
-    my ($self) = @_;
-    
-    my $fh = *STDIN;
-    while(<$fh>) {
-	my @fields = split(';', $_);
-	$self->process_file(@fields);
-    }
-}
-
 sub process_file {
     my ($self, @fields) = @_;
 
@@ -53,10 +43,10 @@ sub process_file {
 
 	$path =~ s/ (\/scratch) (\/\d+) (\[\d+\]) (\.moab01\.westgrid\.uvic\.ca) (\/.\.) (\w*)//x;
 
-	my $data = join("\n", $shaFile, $shaInside, $className, $fullClassName, $path, $basename, $ext);
+	my $data = join("\n", $shaFile, $className, $fullClassName, $path, $basename, $ext);
 	my $sigSha = sha1_hex($data);
 
-	my $output = join(';', $sigSha, $shaInside, $className, $fullClassName, $path, $basename, $ext);
+	my $output = join(';', $sigSha, $className, $fullClassName, $path, $basename, $ext);
 	my $shaOutput = join(';', $sigSha, $shaFile);
 
 	print $outClass $output . "\n";
@@ -94,4 +84,4 @@ sub process_file {
 
 my (@outFiles) = @ARGV;
 my $proc = new processSignatures(@outFiles);
-$proc->process_signatures();
+$proc->process_fields();

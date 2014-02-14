@@ -93,4 +93,15 @@ again:
 
 }
 
+sub process_fields {
+    my ($self) = @_;
+    
+    my $fh = *STDIN;
+    while(<$fh>) {
+	chomp;
+	my @fields = split(';', $_);
+	$self->process_file(@fields);
+    }
+}
+
 1;

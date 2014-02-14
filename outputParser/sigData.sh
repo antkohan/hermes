@@ -1,4 +1,4 @@
-FILES=/home/anthony/Documents/testInfo/sigs/*.sigs
+FILES=/home/tony/Documents/Work/testInfo/sigs/*.sigs
 
 outfileClass=sigClassOut.csv
 outFileMethod=sigMethOut.csv

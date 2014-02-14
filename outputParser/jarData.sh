@@ -1,9 +1,9 @@
 FILES=/home/tony/Documents/Work/testInfo/output/*
-outfile=outFileData.csv
+outfile=jarOut.csv
 
 rm $outfile
 
 for file in $FILES
-do
-    more $file | perl processFileData.pl $outfile
+do 
+    more $file | perl processJars.pl $outfile
 done
