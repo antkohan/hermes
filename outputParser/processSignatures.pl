@@ -43,10 +43,10 @@ sub process_file {
 
 	$path =~ s/ (\/scratch) (\/\d+) (\[\d+\]) (\.moab01\.westgrid\.uvic\.ca) (\/.\.) (\w*)//x;
 
-	my $data = join("\n", $shaFile, $className, $fullClassName, $path, $basename, $ext);
+	my $data = join("\n", $shaFile, $className, $fullClassName, $path, $basename);
 	my $sigSha = sha1_hex($data);
 
-	my $output = join(';', $sigSha, $className, $fullClassName, $path, $basename, $ext);
+	my $output = join(';', $sigSha, $className, $fullClassName, $path, $basename);
 	my $shaOutput = join(';', $sigSha, $shaFile);
 
 	print $outClass $output . "\n";

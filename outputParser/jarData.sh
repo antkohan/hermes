@@ -1,4 +1,4 @@
-FILES=/home/tony/Documents/Work/testInfo/output/*
+FILES=/home/anthony/Documents/testInfo/output/*
 outfile=jarOut.csv
 
 rm $outfile

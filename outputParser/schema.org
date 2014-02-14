@@ -19,8 +19,7 @@ CREATE TABLE classSigs (
       CLASS_NAME text,
       FULL_CLASS_NAME text, 
       PATH text,
-      BASENAME text, 
-      EXTENSION text
+      BASENAME text
 );
 
 CREATE TABLE methSigs (
@@ -46,22 +45,22 @@ CREATE TABLE containers (
       CONTAINER_NAME text
 );
 
-* Queries I used 
+* Queries
   
 CREATE TEMP TABLE tmp as SELECT * FROM files WITH NO DATA;
 
-COPY tmp FROM '/home/tony/Documents/Work/hermes/outputParser/outFileData.csv' WITH DELIMITER ';' CSV;
+COPY tmp FROM '/home/anthony/Documents/hermes/outputParser/outFileData.csv' WITH DELIMITER ';' CSV;
 
 INSERT INTO files SELECT DISTINCT ON (sha_file) * FROM tmp;
 
 CREATE TEMP TABLE tmp2 as SELECT * FROM containers WITH NO DATA;
 
-COPY tmp2 FROM '/home/tony/Documents/Work/hermes/outputParser/jarOut.csv' WITH DELIMITER ';' CSV;
+COPY tmp2 FROM '/home/anthony/Documents/hermes/outputParser/jarOut.csv' WITH DELIMITER ';' CSV;
 
 INSERT INTO containers SELECT DISTINCT ON (sha_container) * FROM tmp2;
 
-COPY classSigs FROM '/home/tony/Documents/Work/hermes/outputParser/sigClassOut.csv' WITH DELIMITER ';' CSV;
-COPY methSigs FROM '/home/tony/Documents/Work/hermes/outputParser/sigMethOut.csv' WITH DELIMITER ';' CSV;
-COPY attrSigs FROM '/home/tony/Documents/Work/hermes/outputParser/sigAttrOut.csv' WITH DELIMITER ';' CSV;
-COPY shas FROM '/home/tony/Documents/Work/hermes/outputParser/outSHAs.csv' WITH DELIMITER ';' CSV;
+COPY classSigs FROM '/home/anthony/Documents/hermes/outputParser/sigClassOut.csv' WITH DELIMITER ';' CSV;
+COPY methSigs FROM '/home/anthony/Documents/hermes/outputParser/sigMethOut.csv' WITH DELIMITER ';' CSV;
+COPY attrSigs FROM '/home/anthony/Documents/hermes/outputParser/sigAttrOut.csv' WITH DELIMITER ';' CSV;
+COPY shas FROM '/home/anthony/Documents/hermes/outputParser/outSHAs.csv' WITH DELIMITER ';' CSV;
 
