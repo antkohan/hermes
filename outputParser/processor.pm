@@ -19,7 +19,7 @@ sub new
 	_stackFiles => [],
 	_currentLevel => 0,
     };
-    print STDERR "To process [", $self->{_filename},"]\n";
+    #print STDERR "To process [", $self->{_filename},"]\n";
     bless $self, $class;
     return $self;
 }
@@ -86,7 +86,7 @@ again:
 	    $self->process_file($data, @fields);
 	    goto again if /^[ZAP];/;
 	} else {
-	    die "illegal record: $_";
+	    print "illegal record: $_\n";
 	}
     }
     close $fh;
@@ -100,7 +100,7 @@ sub process_fields {
     while(<$fh>) {
 	chomp;
 	my @fields = split(';', $_);
-	$self->process_file(@fields);
+	$self->process_file($_, @fields);
     }
 }
 

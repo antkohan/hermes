@@ -23,18 +23,16 @@ sub new {
     $self->{_outClass} = $fhs[0];
     $self->{_outMethod} = $fhs[1];
     $self->{_outAttr} = $fhs[2];
-    $self->{_outSHAs} = $fhs[3];
 
     return $self;
 }
 
 sub process_file {
-    my ($self, @fields) = @_;
+    my ($self, $data, @fields) = @_;
 
     my $outClass = $self->{_outClass};
     my $outMethod = $self->{_outMethod};
     my $outAttr = $self->{_outAttr};
-    my $outSHAs = $self->{_outSHAs};
 
     if ($fields[1] eq "cLA") {
 
@@ -46,12 +44,10 @@ sub process_file {
 	my $data = join("\n", $shaFile, $className, $fullClassName, $path, $basename);
 	my $sigSha = sha1_hex($data);
 
-	my $output = join(';', $sigSha, $className, $fullClassName, $path, $basename);
-	my $shaOutput = join(';', $sigSha, $shaFile);
-
+	my $output = join(';', $sigSha, $shaFile, $className, $fullClassName, $path, $basename);
+	
 	print $outClass $output . "\n";
-	print $outSHAs $shaOutput . "\n";
-
+	
     } elsif ($fields[1] eq "mET") {
 
 	my $classSha = shift @fields;
@@ -60,11 +56,9 @@ sub process_file {
 	my $data = join("\n", $shaFile,$className, $fullClassName, $id, $fullId, $type, $params);
 	my $sigSha = sha1_hex($data);
 
-	my $output = join(';', $sigSha, $className, $fullClassName, $id, $fullId, $type, $params);
-	my $shaOutput = join(';', $sigSha, $shaFile);
+	my $output = join(';', $sigSha,$shaFile, $className, $fullClassName, $id, $fullId, $type, $params);
 
 	print $outMethod $output . "\n";
-	print $outSHAs $shaOutput. "\n";
 
     } else {
 
@@ -74,11 +68,9 @@ sub process_file {
 	my $data = join("\n", $shaFile,$className, $fullClassName, $id);
 	my $sigSha = sha1_hex($data);
 
-	my $output = join(';', $sigSha, $className, $fullClassName, $id);
-	my $shaOutput = join(';', $sigSha, $shaFile);
-
+	my $output = join(';', $sigSha, $shaFile, $className, $fullClassName, $id);
+	
 	print $outAttr $output . "\n";
-	print $outSHAs $shaOutput . "\n";
     }
 }
 

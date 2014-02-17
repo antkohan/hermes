@@ -1,29 +1,41 @@
 * Table Schema
 
-CREATE TABLE shas (
-	SHA_SIG varchar(45),
-	SHA_FILE varchar(45)
+CREATE TABLE pomData (
+      ARTIFACT text,
+      VERSION text,
+      POM_NAME text,
+      GROUP_ID text,
+      ORG_NAME text, 
+      RELATED_JAR text
+);
+
+CREATE TABLE containers (
+      SHA_CONTAINER varchar(40) primary key,
+      CONTAINER_PATH text,
+      CONTAINER_NAME text
 );
 
 CREATE TABLE files (
-       SHA_FILE varchar(45) primary key,
-       SHA_CONTAINER varchar(45),
+       SHA_FILE varchar(40) primary key,
+       SHA_CONTAINER varchar(40) references containers(SHA_CONTAINER),
        PATH text,
        FILE_NAME text,
        EXTENSION text,
        MOD_DATE timestamp with time zone
 );
 
-CREATE TABLE classSigs (
-      SHA_SIG varchar(45) primary key,
+CREATE TABLE sigsClass (
+      SHA_SIG varchar(40) primary key,
+      SHA_FILE varchar(40) references files(SHA_FILE),
       CLASS_NAME text,
       FULL_CLASS_NAME text, 
       PATH text,
       BASENAME text
 );
 
-CREATE TABLE methSigs (
-      SHA_SIG varchar(45) primary key,
+CREATE TABLE sigsMeth (
+      SHA_SIG varchar(40) primary key,
+      SHA_FILE varchar(40) references files(SHA_FILE),
       CLASS_NAME text,
       FULL_CLASS_NAME text, 
       METH_ID text,
@@ -32,35 +44,31 @@ CREATE TABLE methSigs (
       PARAMETERS text
 );
 
-CREATE TABLE attrSigs (
-      SHA_SIG varchar(45) primary key,
+CREATE TABLE sigsAttr (
+      SHA_SIG varchar(40) primary key,
+      SHA_FILE varchar(40) references files(SHA_FILE),
       CLASS_NAME text,
-      FULL_CLASS_NAME text, 
+      FULL_CLASS_NAME text,
       ATTR_ID text
 );
 
-CREATE TABLE containers (
-      SHA_CONTAINER varchar(45) primary key,
-      CONTAINER_PATH text, 
-      CONTAINER_NAME text
-);
-
 * Queries
-  
-CREATE TEMP TABLE tmp as SELECT * FROM files WITH NO DATA;
-
-COPY tmp FROM '/home/anthony/Documents/hermes/outputParser/outFileData.csv' WITH DELIMITER ';' CSV;
-
-INSERT INTO files SELECT DISTINCT ON (sha_file) * FROM tmp;
 
 CREATE TEMP TABLE tmp2 as SELECT * FROM containers WITH NO DATA;
 
 COPY tmp2 FROM '/home/anthony/Documents/hermes/outputParser/jarOut.csv' WITH DELIMITER ';' CSV;
 
-INSERT INTO containers SELECT DISTINCT ON (sha_container) * FROM tmp2;
+INSERT INTO containers SELECT DISTINCT ON (sha_container) * FROM tmp2;  
 
-COPY classSigs FROM '/home/anthony/Documents/hermes/outputParser/sigClassOut.csv' WITH DELIMITER ';' CSV;
-COPY methSigs FROM '/home/anthony/Documents/hermes/outputParser/sigMethOut.csv' WITH DELIMITER ';' CSV;
-COPY attrSigs FROM '/home/anthony/Documents/hermes/outputParser/sigAttrOut.csv' WITH DELIMITER ';' CSV;
-COPY shas FROM '/home/anthony/Documents/hermes/outputParser/outSHAs.csv' WITH DELIMITER ';' CSV;
+CREATE TEMP TABLE tmp as SELECT * FROM files WITH NO DATA;
+
+COPY tmp FROM '/home/anthony/Documents/hermes/outputParser/fileOut.csv' WITH DELIMITER ';' CSV;
+
+INSERT INTO files SELECT DISTINCT ON (sha_file) * FROM tmp;
+
+COPY sigsClass FROM '/home/anthony/Documents/hermes/outputParser/sigClassOut.csv' WITH DELIMITER ';' CSV;
+COPY sigsMeth FROM '/home/anthony/Documents/hermes/outputParser/sigMethOut.csv' WITH DELIMITER ';' CSV;
+COPY sigsAttr FROM '/home/anthony/Documents/hermes/outputParser/sigAttrOut.csv' WITH DELIMITER ';' CSV;
+
+COPY pomData FROM '/home/anthony/Documents/formatedPomOutput.csv' WITH DELIMITER ';' CSV;
 

@@ -22,11 +22,11 @@ sub new {
 } 
 
 sub process_file {
-    my($self, @fields) = @_;
+    my($self, $data, @fields) = @_;
    
     my $outFile = $self->{_outFile};
 
-    if($fields[0] eq "Z" and $fields[1] eq "Starting") {
+    if($data =~ /^Z;Starting;(.+);([0-9a-f]{40})$/) {
 	my $fullPath = $fields[2];
 	$fullPath =~ s/ \/global\/scratch\/dmg\/maven //x;
 	$fullPath =~ s/ (\/scratch) (\/\d+) (\[\d+\]) (\.moab01\.westgrid\.uvic\.ca) (\/.\.) (\w*)//x;
